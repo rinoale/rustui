@@ -1,7 +1,9 @@
 # rustui
 
-`rustui` generates a small Ratatui application scaffold with a shared interface
-policy for personal Rust TUIs.
+`rustui` is a small Rust TUI framework and scaffold generator for consistent
+Ratatui applications. It provides reusable library modules for common
+keymapping, styling, component contracts, and non-blocking event plumbing, plus
+`rustui init` for generating a new editable app.
 
 ## Usage
 
@@ -9,6 +11,30 @@ policy for personal Rust TUIs.
 rustui init my-tui
 cd my-tui
 cargo run
+```
+
+As a library during local development:
+
+```toml
+[dependencies]
+rustui = { path = "../rustui" }
+```
+
+As a versioned dependency:
+
+```toml
+[dependencies]
+rustui = { git = "git@github.com:rinoale/rustui.git", tag = "v0.1.0" }
+```
+
+Then import framework pieces directly:
+
+```rust
+use rustui::{
+    keymap::{Key, Keymap, binding},
+    runtime::spawn_event_reader,
+    style::{Design, Palette, Role, style},
+};
 ```
 
 The generated project uses:
@@ -41,6 +67,13 @@ The generated project uses:
 The scaffold is meant to be adapted. The defaults guide common behavior, but
 local apps can replace bindings, add commands, or change theme roles without
 forking framework internals.
+
+## Library Structure
+
+- `rustui::keymap`: generic key bindings over each app's local intent enum
+- `rustui::style`: design tokens, typed roles, selectors, and style builder DSL
+- `rustui::runtime`: Tokio-friendly terminal event pump
+- `rustui::component`: lightweight component trait for shared render/input shape
 
 ## Non-Blocking UX Backbone
 
