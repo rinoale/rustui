@@ -1,0 +1,8 @@
+[package]
+name = "rustui"
+version = "0.1.0"
+edition = "2024"
+description = "A small scaffold generator for consistent Rust Ratatui applications."
+license = "MIT"
+
+[dependencies]
