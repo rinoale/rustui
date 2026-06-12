@@ -17,6 +17,7 @@ The generated project uses:
 - Ratatui 0.30.1
 - Crossterm 0.29.0
 - Color-Eyre 0.6.5
+- Tokio 1.x
 
 ## Interface Policy
 
@@ -40,6 +41,22 @@ The generated project uses:
 The scaffold is meant to be adapted. The defaults guide common behavior, but
 local apps can replace bindings, add commands, or change theme roles without
 forking framework internals.
+
+## Non-Blocking UX Backbone
+
+Generated projects use Tokio as the async runtime. The TUI runtime keeps
+terminal events, rendering ticks, and application task completions separated:
+
+- terminal input is read through an event pump, not inside application actions
+- the app exposes `poll_tasks()` as the standard place to receive background
+  task results
+- long work should be launched with `tokio::spawn` and reported back through an
+  app-owned channel
+- scene transitions such as `Form -> Connecting -> Error/Form` should update
+  app state instead of blocking the terminal thread
+
+The generated sample includes a `:task` command that starts an async background
+task and keeps the UI responsive while it runs.
 
 ## Design And Color Themes
 
